@@ -9,6 +9,8 @@ var apiData = {};
 // Default values
 var maxOutlay = 1000000;
 var maxOffers = 1;
+var maxBacklog = 7;
+var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
 var sortByTotalProfit = true;
 
@@ -96,6 +98,13 @@ function updateDisplay() {
 			item.buyPrice = highestBuyOrder + 0.1;
 			item.profitPerItem = item.sellPrice - item.buyPrice;
 
+			// Calculate the sales backlog - how many days' worth of sell orders are
+			// already on the marketplace - higher backlogs = higher chance you'll be
+			// stuck with the items longer before you can sell them.
+			sellVolume = apiData.products[id].quick_status.sellVolume;
+			sellMovingWeek = apiData.products[id].quick_status.sellMovingWeek;
+			item.salesBacklog = sellVolume / (sellMovingWeek / 7.0);
+
 			// Work out how many we can afford with our maximum outlay, and
 			// the constraint of how many orders we're willing to place
 			affordableQuantity = Math.floor(maxOutlay / item.buyPrice);
@@ -103,15 +112,18 @@ function updateDisplay() {
 			item.numOffersRequired = Math.ceil(item.maxQuantity / MAX_QUANTITY_PER_ORDER);
 			item.totalProfit = (item.sellPrice - item.buyPrice) * item.maxQuantity
 
-			// Only store the data if we can afford at least one item
-			if (item.maxQuantity > 0) {
+			// Only store the data if the item is profitable, and we can afford at
+			// least one item, and the sales backlog is below our threshold
+			if (item.profitPerItem >= 0.1 && item.maxQuantity > 0 && item.salesBacklog <= maxBacklog) {
 				calcData.push(item);
 			}
 		}
 	}
 
 	// Apply the required sort to the data
-	if (sortByProfitPerItem) {
+	if (sortBySalesBacklog) {
+		calcData.sort((a, b) => (a.salesBacklog > b.salesBacklog) ? 1 : -1)
+	} else if (sortByProfitPerItem) {
 		calcData.sort((a, b) => (a.profitPerItem > b.profitPerItem) ? -1 : 1)
 	} else if (sortByTotalProfit) {
 		calcData.sort((a, b) => (a.totalProfit > b.totalProfit) ? -1 : 1)
@@ -122,7 +134,7 @@ function updateDisplay() {
 	// Create table header. If maxOffers is >1, an extra column is added to show
 	// the number of offers required to buy/sell that many items
 	var table = $('<table>').addClass('results');
-	var headerFields = "<th>Item Name</th><th>Buy Order at</th><th>Sell Offer at</th><th>Profit per Item</th><th>Quantity</th>";
+	var headerFields = "<th>Item Name</th><th>Sales Backlog</th><th>Buy Order at</th><th>Sell Offer at</th><th>Profit per Item</th><th>Quantity</th>";
 	if (maxOffers > 1) {
 		headerFields += "<th>Number of Offers</th>";
 	}
@@ -135,7 +147,7 @@ function updateDisplay() {
 	calcData.forEach(function(item) { 
 		//  If maxOffers is >1, an extra column is added to show
 		// the number of offers required to buy/sell that many items
-		var rowFields = "<td>" + item.name + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + item.sellPrice.toFixed(1) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
+		var rowFields = "<td>" + item.name + "</td><td>" + item.salesBacklog.toFixed(1) + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + item.sellPrice.toFixed(1) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
 		if (maxOffers > 1) {
 			rowFields += "<td>" + item.numOffersRequired + "</td>";
 		}
@@ -168,10 +180,19 @@ $('#maxOffers').keyup(function() {
     maxOffers = $( this ).val();
     updateDisplay();
 });
+$('#maxBacklog').val(maxBacklog);
+$('#maxBacklog').keyup(function() {
+    maxBacklog = $( this ).val();
+    updateDisplay();
+});
 $('input.sortBy').on('change', function() {
+	sortBySalesBacklog = $('input#sortBySalesBacklog').is(":checked");
 	sortByProfitPerItem = $('input#sortByProfitPerItem').is(":checked");
 	sortByTotalProfit = $('input#sortByTotalProfit').is(":checked");
 	updateDisplay();
+});
+$('button#helpButton').click(function(){
+  $('div#help').toggle("fast");
 });
 
 // Get the data from the Skyblock API

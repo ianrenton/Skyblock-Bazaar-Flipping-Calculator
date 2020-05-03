@@ -25,6 +25,22 @@ body {
 h1 {
 	text-align: center;
 }
+img.github-ribbon {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+button#helpButton {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  padding: 0.5em;
+  border: 3px solid #55AC58;
+  background-color: #027201;
+  color: white;
+  font-family: "Minecraft", sans-serif;
+  font-size: 1em;
+}
 
 /** Input field formatting */
 div.inputs, div.sorts {
@@ -46,6 +62,9 @@ input#maxOutlay {
 input#maxOffers {
   width: 3em;
 }
+input#maxBacklog {
+  width: 3em;
+}
 div.sorts input[type=radio] {
   opacity: 0;
   position: fixed;
@@ -62,6 +81,16 @@ div.sorts label:hover {
 div.sorts input[type="radio"]:checked + label {
     background-color: black;
     color: white;
+}
+
+/* Help formatting */
+div#help {
+  display: none;
+  padding: 0.5em 1em;
+  border: 3px solid #55AC58;
+  background-color: #027201;
+  color: white;
+  font-family: sans-serif;
 }
 
 /* Table formatting */

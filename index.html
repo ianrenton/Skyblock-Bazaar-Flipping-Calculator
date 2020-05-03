@@ -4,29 +4,54 @@
 	<title>Skyblock Bazaar Flipping Calculator</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="style.css"/>
+    <link rel="icon" type="image/png" href="./favicon.png">
 </head>
 <body>
+	<a href="https://github.com/ianrenton/Skyblock-Bazaar-Flipping-Calculator"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full github-ribbon" alt="Fork me on GitHub" data-recalc-dims="1"></a>
+	<button type="button" id="helpButton">Explain Please!</button>
+
 	<h1>Skyblock Bazaar Flipping Calculator</h1>
 
 	<div class="inputs">
 		<p>I have <input id="maxOutlay" type="text"> coins to use for bazaar flipping</p>
 		<p>I only want to place at most <input id="maxOffers" type="text"> offers</p>
+		<p>Exclude items with a sales backlog of more than <input id="maxBacklog" type="text"> days</p>
 	</div>
 
 	<div class="sorts">
 		<input type="radio" id="sortByName" class="sortBy" name="sortBy" value="name">
 		<label for="sortByName">Sort by Item Name</label>
+		<input type="radio" id="sortBySalesBacklog" class="sortBy" name="sortBy" value="salesBacklog">
+		<label for="sortBySalesBacklog">Sort by Sales Backlog</label>
 		<input type="radio" id="sortByProfitPerItem" class="sortBy" name="sortBy" value="profitPerItem">
 		<label for="sortByProfitPerItem">Sort by Profit per Item</label>
 		<input type="radio" id="sortByTotalProfit" class="sortBy" name="sortBy" value="totalProfit" checked="checked">
 		<label for="sortByTotalProfit">Sort by Total Profit</label>
 	</div>
 
+	<div id="help">
+		<p>"Bazaar Flipping" in Hypixel Skyblock is the practice of putting in a <b>Buy Order</b> for a certain set of items at the Bazaar, and simultaneously also putting in a <b>Sell Offer</b> for the same items, for a higher price. This page queries the Skyblock API and gives you a list of the most profitable items to "flip" at the present time.</p>
+		<p>Controls:</p>
+		<ul>
+			<li>Number of coins available: The first control will affect how many of each item you can flip&mdash;if you can't afford even one of the item, it will be hidden from the table.</li>
+			<li>Maximum number of offers: For very cheap items, you may have to place more than one offer to achieve the maximum profit, due to the 71680 item cap per offer. The second control constrains this if you only wish to make a small number of orders/offers.</li>
+			<li>Exclude items with long backlogs: In some cases, certain items may be selling very slowly, leading to a high risk that you will be left with the items, not the profit. The third control excludes items from the list that have a backlog of more than a certain number of days.</li>
+		</ul>
+		<p>Terminology:</p>
+		<ul>
+			<li><b>Sales Backlog:</b> This is the number of items currently for sale, divided by the number of daily sales, averaged over a week. It is a measure, in days, of how long on average you might expect your sale offer to be fulfilled. Higher numbers represent greater risk that you will spend many days owning the items, unable to sell them.</li>
+			<li><b>Buy Order at:</b> The price (per item) you should submit a Buy Order at. This is 0.1 coins higher than the current highest-priced Buy Order, offering more than the competition in the hope of a quick buy.</li>
+			<li><b>Sell Offer at:</b> The price (per item) you should submit a Sell Offer at. This is 0.1 coins lower than the current lowest Sell Offer, undercutting the comptetition in the hope of a quick sale.</li>
+			<li><b>Profit per Item:</b> The profit implied per item, i.e. (sell offer price &minus; buy order price).</li>
+			<li><b>Quantity:</b> The quantity of these items you can "flip", based on the money you have available. If you allow the calculator to use more than one offer at a time, the number of offers required to meet this quantity will also be shown.</li>
+			<li><b>Total Profit:</b> The total profit made by flipping the stated quantity of this item.</li>
+		</ul>
+	</div>
+
 	<div id="table"></div>
 
 	<div id="footer"><p>Made by <a href="https://ianrenton.com">Ian Renton</a>. <a href="https://github.com/ianrenton/Skyblock-Bazaar-Flipping-Calculator">Source on GitHub</a>. Data from the <a href="https://api.hypixel.net/">Hypixel API</a>.</p>
 		<p>Stonks may go up as well as down. Your island may be at risk if you do not keep up repayments on your mortgage. All financial transactions are underwritten by JerryCo Financial Services.</p>
-		<p>Profit calculation assumes undercutting by 0.1 coins per item on both buy and sell orders, i.e.<br/>profit = (current lowest sell offer &minus; 0.1)  &minus; (current highest buy order + 0.1)</p>
 	</div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
