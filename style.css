@@ -84,13 +84,16 @@ div.sorts input[type="radio"]:checked + label {
 }
 
 /* Help formatting */
-div#help {
+div.help {
   display: none;
-  padding: 0.5em 1em;
+  padding: 0.5em;
   border: 3px solid #55AC58;
   background-color: #027201;
   color: white;
   font-family: sans-serif;
+}
+div.help p {
+  margin: 0;
 }
 
 /* Table formatting */

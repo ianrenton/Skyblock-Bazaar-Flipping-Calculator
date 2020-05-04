@@ -12,10 +12,28 @@
 
 	<h1>Skyblock Bazaar Flipping Calculator</h1>
 
+	<div class="help">
+		<p>"Bazaar Flipping" in Hypixel Skyblock is the practice of putting in a <b>Buy Order</b> for a certain set of items at the Bazaar, and simultaneously also putting in a <b>Sell Offer</b> for the same items, for a higher price. This page queries the Skyblock API and gives you a list of the most profitable items to "flip" at the present time.</p>
+	</div>
+
 	<div class="inputs">
 		<p>I have <input id="maxOutlay" type="text"> coins to use for bazaar flipping</p>
+
+		<div class="help">
+			<p>Number of coins available: This will affect how many of each item you can flip&mdash;if you can't afford even one of the item, it will be hidden from the table.</p>
+		</div>
+
 		<p>I only want to place at most <input id="maxOffers" type="text"> offers</p>
+
+		<div class="help">
+			<p>Maximum number of offers: For very cheap items, you may have to place more than one offer to achieve the maximum profit, due to the 71680 item cap per offer. This control constrains this if you only wish to make a small number of orders/offers.</p>
+		</div>
+
 		<p>Exclude items with a sales backlog of more than <input id="maxBacklog" type="text"> days</p>
+
+		<div class="help">
+			<p>Exclude items with long backlogs: In some cases, certain items may be selling very slowly, leading to a high risk that you will be left with the items, not the profit. This control excludes items from the list that have a backlog of more than a certain number of days.</p>
+		</div>
 	</div>
 
 	<div class="sorts">
@@ -29,15 +47,9 @@
 		<label for="sortByTotalProfit">Sort by Total Profit</label>
 	</div>
 
-	<div id="help">
-		<p>"Bazaar Flipping" in Hypixel Skyblock is the practice of putting in a <b>Buy Order</b> for a certain set of items at the Bazaar, and simultaneously also putting in a <b>Sell Offer</b> for the same items, for a higher price. This page queries the Skyblock API and gives you a list of the most profitable items to "flip" at the present time.</p>
-		<p>Controls:</p>
-		<ul>
-			<li>Number of coins available: The first control will affect how many of each item you can flip&mdash;if you can't afford even one of the item, it will be hidden from the table.</li>
-			<li>Maximum number of offers: For very cheap items, you may have to place more than one offer to achieve the maximum profit, due to the 71680 item cap per offer. The second control constrains this if you only wish to make a small number of orders/offers.</li>
-			<li>Exclude items with long backlogs: In some cases, certain items may be selling very slowly, leading to a high risk that you will be left with the items, not the profit. The third control excludes items from the list that have a backlog of more than a certain number of days.</li>
-		</ul>
-		<p>Terminology:</p>
+	<div class="help">
+		<p>The table shows all items tradeable on the bazaar, unless: (a) it's not profitable to flip it, (b) it's so expensive to buy you can't even afford one item, or (c) the backlog to sell the item is longer than your limit.</p>
+		<p>The columns are explained as follows:</p>
 		<ul>
 			<li><b>Sales Backlog:</b> This is the number of items currently for sale, divided by the number of daily sales, averaged over a week. It is a measure, in days, of how long on average you might expect your sale offer to be fulfilled. Higher numbers represent greater risk that you will spend many days owning the items, unable to sell them.</li>
 			<li><b>Buy Order at:</b> The price (per item) you should submit a Buy Order at. This is 0.1 coins higher than the current highest-priced Buy Order, offering more than the competition in the hope of a quick buy.</li>

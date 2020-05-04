@@ -192,7 +192,7 @@ $('input.sortBy').on('change', function() {
 	updateDisplay();
 });
 $('button#helpButton').click(function(){
-  $('div#help').toggle("fast");
+  $('div.help').toggle("fast");
 });
 
 // Get the data from the Skyblock API
