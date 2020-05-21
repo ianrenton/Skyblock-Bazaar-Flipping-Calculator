@@ -111,13 +111,10 @@ th {
   background-color: black;
   color: white;
 }
-.noprofit {
-  background-color: rgba(255,0,0,0.5);
-}
 
 /* Footer formatting */
 div#footer {
-  margin-top: 4px;
+  margin-top: 4em;
   text-align: center;
   font-size: 0.8em;
 }
