@@ -113,6 +113,9 @@ th {
 }
 
 /* Footer formatting */
+div#similartools {
+  margin-top: 4em;
+}
 div#footer {
   margin-top: 4em;
   text-align: center;
