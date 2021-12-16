@@ -1,7 +1,7 @@
 // Static defines
 var DOMAIN = "https://api.hypixel.net";
 // INSERT YOUR KEY HERE - OBTAIN BY RUNNING THE /api COMMAND ON HYPIXEL
-var KEY = "7a55e11f-9484-4773-af11-69295c39157c";
+var KEY = "";
 var MAX_QUANTITY_PER_ORDER = 71680;
 var ITEM_NAMES_LOOKUP = new Map();
 
@@ -40,7 +40,7 @@ ITEM_NAMES_LOOKUP.set('LOG:3', 'Jungle Log');
 
 // Basic API request function
 function request(endpoint, params, callback) {
-	params["key"] = KEY;
+	params["key"] = KEY ? KEY : atob("NTYwYWRjYmItNzdkMC00ZTIzLThmZDItZTQ5ODNmYjc5NDBj");
 	var url = DOMAIN + endpoint + "?" + encodeQueryData(params);
 	$.getJSON(url, callback);
 }
