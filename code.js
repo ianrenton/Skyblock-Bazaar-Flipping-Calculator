@@ -194,7 +194,7 @@ function updateDisplay() {
 		var buySummary = apiData.products[id].buy_summary;
 		var sellSummary = apiData.products[id].sell_summary;
 
-		// Check for empty arrays - if yoy can't buy or sell the item then there's
+		// Check for empty arrays - if you can't buy or sell the item then there's
 		// no point including it
 		if (Array.isArray(buySummary) && Array.isArray(sellSummary) && buySummary.length > 0 && sellSummary.length > 0) {
 			// Find the highest buy order price and the lowest sell offer price in the
