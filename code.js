@@ -10,6 +10,7 @@ var apiData = {};
 var maxOutlay = 1000000;
 var maxOffers = 1;
 var maxBacklog = 7;
+var includeEnchantments = false;
 var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
 var sortByTotalProfit = true;
@@ -187,6 +188,7 @@ function updateDisplay() {
 	var notProfitable = [];
 	var notAffordable = [];
 	var notSellable = [];
+	var excludedEnchantments = [];
 
 	// Iterate over all products...
 	for (id in apiData.products) {
@@ -231,10 +233,12 @@ function updateDisplay() {
 			item.totalProfit = (item.sellPrice - item.buyPrice) * item.maxQuantity
 
 			// Only store the data if the item is profitable, and we can afford at
-			// least one item, and the sales backlog is below our threshold. Otherwise
+			// least one item, and the sales backlog is below our threshold, etc. Otherwise
 			// add the name of the item to a separate list so we can note at the bottom
 			// of the table why it's not being displayed.
-			if (item.profitPerItem < 0.1) {
+			if (!includeEnchantments && item.name.startsWith("Enchantment ")) {
+				excludedEnchantments.push(item);
+			} else if (item.profitPerItem < 0.1) {
 				notProfitable.push(item);
 			} else if (item.maxQuantity <= 0) {
 				notAffordable.push(item);
@@ -301,6 +305,10 @@ function updateDisplay() {
 		notSellable.sort((a, b) => (a.salesBacklog > b.salesBacklog) ? -1 : 1);
 		missingItemExplanation += '<p><b>Items excluded from the table because the sales backlog is too long:</b><br/>' + notSellable.map(function(o) { return (o.name + ' (' + o.salesBacklog.toFixed(1) + ' days)'); }).join(', ') + '</p>';
 	}
+	if (excludedEnchantments.length > 0) {
+		excludedEnchantments.sort((a, b) => (a.name < b.name) ? -1 : 1);
+		missingItemExplanation += '<p><b>Enchantments excluded from the table at user request:</b><br/>' + excludedEnchantments.map(function(o) { return (o.name); }).join(', ') + '</p>';
+	}
 	$('#missingItemExplanation').html(missingItemExplanation);
 }
 
@@ -326,6 +334,10 @@ $('input.sortBy').on('change', function() {
 	sortBySalesBacklog = $('input#sortBySalesBacklog').is(":checked");
 	sortByProfitPerItem = $('input#sortByProfitPerItem').is(":checked");
 	sortByTotalProfit = $('input#sortByTotalProfit').is(":checked");
+	updateDisplay();
+});
+$('input#includeEnchantments').on('change', function() {
+	includeEnchantments = $('input#includeEnchantments').is(":checked");
 	updateDisplay();
 });
 $('button#helpButton').click(function(){
