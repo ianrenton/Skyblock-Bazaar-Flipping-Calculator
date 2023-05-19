@@ -11,6 +11,7 @@ var maxOutlay = 1000000;
 var maxOffers = 1;
 var maxBacklog = 7;
 var includeEnchantments = false;
+var removeManipulated = false;
 var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
 var sortByTotalProfit = true;
@@ -178,6 +179,10 @@ function itemLimit(id){
 	}
 }
 
+function isLikelyManipulated(buy, sell) {
+    return sell > buy + buy * ((100 / (buy + 12)) + 0.2)
+}
+
 
 // Main function that performs calculations and updates the display
 function updateDisplay() {
@@ -189,6 +194,7 @@ function updateDisplay() {
 	var notAffordable = [];
 	var notSellable = [];
 	var excludedEnchantments = [];
+	var likelyManipulated = [];
 
 	// Iterate over all products...
 	for (id in apiData.products) {
@@ -244,6 +250,8 @@ function updateDisplay() {
 				notAffordable.push(item);
 			} else if (item.salesBacklog > maxBacklog) {
 				notSellable.push(item);
+			} else if (isLikelyManipulated(highestBuyOrder, lowestSellOffer) && removeManipulated) {
+			    likelyManipulated.push(item);
 			} else {
 				calcData.push(item);
 			}
@@ -338,6 +346,10 @@ $('input.sortBy').on('change', function() {
 });
 $('input#includeEnchantments').on('change', function() {
 	includeEnchantments = $('input#includeEnchantments').is(":checked");
+	updateDisplay();
+});
+$('input#removeManipulated').on('change', function() {
+	removeManipulated = $('input#removeManipulated').is(":checked");
 	updateDisplay();
 });
 $('button#helpButton').click(function(){
