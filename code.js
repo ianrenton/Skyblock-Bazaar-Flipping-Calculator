@@ -38,6 +38,7 @@ ITEM_NAMES_LOOKUP.set('LOG_2:1', 'Dark Oak Log');
 ITEM_NAMES_LOOKUP.set('LOG_2', 'Acacia Log');
 ITEM_NAMES_LOOKUP.set('LOG:3', 'Jungle Log');
 
+// Custom limits for some items with a different buy limit to usual
 ITEM_CUSTOM_LIMIT.set('BOOSTER_COOKIE',128);
 ITEM_CUSTOM_LIMIT.set('HOT_POTATO_BOOK',256);
 ITEM_CUSTOM_LIMIT.set('FUMING_POTATO_BOOK',256);
@@ -171,6 +172,8 @@ function prettify(string) {
 	}
 	return result;
 }
+
+// Calculate the buy limit, in units, for the provided item name.
 function itemLimit(id){
 	if (ITEM_CUSTOM_LIMIT.has(id)) {
 		return ITEM_CUSTOM_LIMIT.get(id);
@@ -179,6 +182,7 @@ function itemLimit(id){
 	}
 }
 
+// Calculate whether the price of an item seems like it's artificially manipulated.
 function isLikelyManipulated(buy, sell) {
     return sell > buy + buy * ((100 / (buy + 12)) + 0.2)
 }
@@ -316,6 +320,10 @@ function updateDisplay() {
 	if (excludedEnchantments.length > 0) {
 		excludedEnchantments.sort((a, b) => (a.name < b.name) ? -1 : 1);
 		missingItemExplanation += '<p><b>Enchantments excluded from the table at user request:</b><br/>' + excludedEnchantments.map(function(o) { return (o.name); }).join(', ') + '</p>';
+	}
+	if (likelyManipulated.length > 0) {
+		likelyManipulated.sort((a, b) => (a.name < b.name) ? -1 : 1);
+		missingItemExplanation += '<p><b>Likely-manipulated items excluded from the table at user request:</b><br/>' + likelyManipulated.map(function(o) { return (o.name); }).join(', ') + '</p>';
 	}
 	$('#missingItemExplanation').html(missingItemExplanation);
 }
