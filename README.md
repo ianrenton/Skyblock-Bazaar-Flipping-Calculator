@@ -3,4 +3,4 @@ Uses the latest Hypixel Skyblock Bazaar prices to calculate the most profitable 
 
 Suggestions and improvements are welcome.
 
-As well as original work by Ian Renton, released as public domain under the "Unlicense" (see LICENSE file), this repository also contains a copy of the [Minecraft web font by South-Paw](https://github.com/South-Paw/typeface-minecraft), which is MIT licenced, used with thanks.
+As well as original work by Ian Renton plus other contributors, released as public domain under the "Unlicense" (see LICENSE file), this repository also contains a copy of the [Minecraft web font by South-Paw](https://github.com/South-Paw/typeface-minecraft), which is MIT licenced, used with thanks.
