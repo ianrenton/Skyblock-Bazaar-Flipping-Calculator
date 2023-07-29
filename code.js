@@ -237,9 +237,13 @@ function updateDisplay() {
 			// the constraint of how many orders we're willing to place
 			affordableQuantity = Math.floor(maxOutlay / item.buyPrice);
 			
-			var max_quantity_per_order = itemLimit(id);
-			item.maxQuantity = Math.min(affordableQuantity, maxOffers * max_quantity_per_order);
-			item.numOffersRequired = Math.ceil(item.maxQuantity / max_quantity_per_order);
+			item.max_quantity_per_order = itemLimit(id);
+			item.maxQuantity = Math.min(affordableQuantity, maxOffers * item.max_quantity_per_order);
+			item.numOffersRequired = Math.ceil(item.maxQuantity / item.max_quantity_per_order);
+			item.numOffersRequiredText = item.numOffersRequired + " of " + item.max_quantity_per_order;
+			if (item.maxQuantity % item.max_quantity_per_order != 0) {
+				item.numOffersRequiredText += "<br/>+ 1 of " + (item.maxQuantity % item.max_quantity_per_order);
+			}
 			item.totalProfit = (item.sellPrice - item.buyPrice) * item.maxQuantity
 
 			// Only store the data if the item is profitable, and we can afford at
@@ -278,7 +282,7 @@ function updateDisplay() {
 	var table = $('<table>').addClass('results');
 	var headerFields = "<th>Item Name</th><th>Sales Backlog</th><th>Buy Order at</th><th>Sell Offer at</th><th>Profit per Item</th><th>Quantity</th>";
 	if (maxOffers > 1) {
-		headerFields += "<th>Number of Offers</th>";
+		headerFields += "<th>Offer Breakdown</th>";
 	}
 	headerFields += "<th>Total Profit</th>";
 	var header = $('<tr>').html(headerFields);
@@ -291,7 +295,7 @@ function updateDisplay() {
 		// the number of offers required to buy/sell that many items
 		var rowFields = "<td>" + item.name + "</td><td>" + item.salesBacklog.toFixed(1) + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + item.sellPrice.toFixed(1) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
 		if (maxOffers > 1) {
-			rowFields += "<td>" + item.numOffersRequired + "</td>";
+			rowFields += "<td>" + item.numOffersRequiredText + "</td>";
 		}
 		rowFields += "<td>" + item.totalProfit.toFixed(0) + "</td>";
 		var row = $('<tr>').html(rowFields);
