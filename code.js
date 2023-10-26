@@ -303,7 +303,7 @@ function updateDisplay() {
 				notProfitable.push(item);
 			} else if (item.maxQuantity <= 0) {
 				notAffordable.push(item);
-			} else if (item.salesBacklog > maxBacklog) {
+			} else if (item.salesBacklog > maxBacklog && !cheaperToNPC.includes(item)) {
 				notSellable.push(item);
 			} else if (isLikelyManipulated(highestBuyOrder, lowestSellOffer) && removeManipulated) {
 			    likelyManipulated.push(item);
@@ -345,7 +345,7 @@ function updateDisplay() {
 	calcData.forEach(function(item) { 
 		//  If maxOffers is >1, an extra column is added to show
 		// the number of offers required to buy/sell that many items
-		var rowFields = "<td>" + item.name + "</td><td>" + item.salesBacklog.toFixed(1) + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + ((cheaperToNPC.includes(item)) ? item.sellPrice.toFixed(0) + " (to NPC)" : item.sellPrice.toFixed(1)) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
+		var rowFields = "<td>" + item.name + "</td><td>" + (cheaperToNPC.includes(item) ? "N/A" : item.salesBacklog.toFixed(1)) + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + (cheaperToNPC.includes(item) ? item.sellPrice.toFixed(0) + " (to NPC)" : item.sellPrice.toFixed(1)) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
 		if (maxOffers > 1) {
 			rowFields += "<td>" + item.numOffersRequiredText + "</td>";
 		}
