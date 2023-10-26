@@ -4,13 +4,15 @@ var ITEM_NAMES_LOOKUP = new Map();
 var ITEM_CUSTOM_LIMIT = new Map();
 
 // Global data storage
-var apiData = {};
+var bazaarData = {};
+var itemData = {};
 
 // Default values
 var maxOutlay = 1000000;
 var maxOffers = 1;
 var maxBacklog = 7;
 var includeEnchantments = false;
+var includeSaleToNPCs = true;
 var removeManipulated = false;
 var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
@@ -130,28 +132,55 @@ function encodeQueryData(data) {
    return ret.join('&');
 }
 
-// Main method to get product list
-function getProductList() {
+// Main method to get bazaar product list
+function getBazaarProductList() {
 	request("/skyblock/bazaar", {}, async function(result) {
 		// Store refresh date
 		lastRefresh = new Date();
 		// Unpack data
-		handleData(result);
+		handleBazaarData(result);
 	});
 }
 
-// Callback handler for the product list
-async function handleData(result) {
+// Callback handler for the bazaar product list
+async function handleBazaarData(result) {
 	if (result.success) {
 		// Success, we have data! Store it for use
-		apiData = result;
+		bazaarData = result;
 
-		// Refresh the display
-		updateDisplay();
+		// Refresh the display, if we already have item data ready to go
+		if (Object.keys(bazaarData).length > 0) {
+			updateDisplay();
+		}
 	} else {
 		// Failed, request another go
 		await new Promise(r => setTimeout(r, 500));
-		getProductList();
+		getBazaarProductList();
+	}
+}
+
+// Main method to get the general item list
+function getItemList() {
+	request("/resources/skyblock/items", {}, async function(result) {
+		// Unpack data
+		handleItemData(result);
+	});
+}
+
+// Callback handler for the general item list
+async function handleItemData(result) {
+	if (result.success) {
+		// Success, we have data! Store it for use
+		itemData = result;
+
+		// Refresh the display, if we already have bazaar data ready to go
+		if (Object.keys(bazaarData).length > 0) {
+			updateDisplay();
+		}
+	} else {
+		// Failed, request another go
+		await new Promise(r => setTimeout(r, 500));
+		getItemList();
 	}
 }
 
@@ -193,18 +222,29 @@ function updateDisplay() {
 	// First, set up a list to store our calculated data that will
 	// appear in the table
 	var calcData = [];
-	// And lists to store reasons why items were missed from the table
+	// And lists to store reasons why items were missed from the table and other metadata
 	var notProfitable = [];
 	var notAffordable = [];
 	var notSellable = [];
 	var excludedEnchantments = [];
 	var likelyManipulated = [];
+	var cheaperToNPC = [];
 
-	// Iterate over all products...
-	for (id in apiData.products) {
+	// Before we work on the bazaar products, turn the "items" API call result into a simple map of
+	// item key => NPC buy price, if one is present. This will avoid us having to iterate through
+	// it every time we want to check the price we could sell an item to NPCs at.
+	var npcSellPrices = new Map();
+	for (id in itemData.items) {
+		if (Object.hasOwn(itemData.items[id], "npc_sell_price")) {
+			npcSellPrices.set(itemData.items[id].id, itemData.items[id].npc_sell_price);
+		}
+	}
+
+	// Now the real work of going through all the bazaar products. Iterate over the data...
+	for (id in bazaarData.products) {
 		// Get the summaries
-		var buySummary = apiData.products[id].buy_summary;
-		var sellSummary = apiData.products[id].sell_summary;
+		var buySummary = bazaarData.products[id].buy_summary;
+		var sellSummary = bazaarData.products[id].sell_summary;
 
 		// Check for empty arrays - if you can't buy or sell the item then there's
 		// no point including it
@@ -223,14 +263,21 @@ function updateDisplay() {
 			item.id = id;
 			item.name = prettify(id);
 			item.sellPrice = lowestSellOffer - 0.1;
+
+			// Interject here if we are able to sell this to an NPC for more than we would get on the bazaar
+			if (includeSaleToNPCs && npcSellPrices.has(id) && item.sellPrice < npcSellPrices.get(id)) {
+				item.sellPrice = npcSellPrices.get(id);
+				cheaperToNPC.push(item);
+			}
+
 			item.buyPrice = highestBuyOrder + 0.1;
 			item.profitPerItem = item.sellPrice - item.buyPrice;
 
 			// Calculate the sales backlog - how many days' worth of sell orders are
 			// already on the marketplace - higher backlogs = higher chance you'll be
 			// stuck with the items longer before you can sell them.
-			sellVolume = apiData.products[id].quick_status.sellVolume;
-			sellMovingWeek = apiData.products[id].quick_status.sellMovingWeek;
+			sellVolume = bazaarData.products[id].quick_status.sellVolume;
+			sellMovingWeek = bazaarData.products[id].quick_status.sellMovingWeek;
 			item.salesBacklog = sellVolume / (sellMovingWeek / 7.0);
 
 			// Work out how many we can afford with our maximum outlay, and
@@ -293,7 +340,7 @@ function updateDisplay() {
 	calcData.forEach(function(item) { 
 		//  If maxOffers is >1, an extra column is added to show
 		// the number of offers required to buy/sell that many items
-		var rowFields = "<td>" + item.name + "</td><td>" + item.salesBacklog.toFixed(1) + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + item.sellPrice.toFixed(1) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
+		var rowFields = "<td>" + item.name + "</td><td>" + item.salesBacklog.toFixed(1) + "</td><td>" + item.buyPrice.toFixed(1) + "</td><td>" + ((cheaperToNPC.includes(item)) ? item.sellPrice.toFixed(0) + " (to NPC)" : item.sellPrice.toFixed(1)) + "</td><td>" + item.profitPerItem.toFixed(1) + "</td><td>" + item.maxQuantity + "</td>";
 		if (maxOffers > 1) {
 			rowFields += "<td>" + item.numOffersRequiredText + "</td>";
 		}
@@ -360,6 +407,10 @@ $('input#includeEnchantments').on('change', function() {
 	includeEnchantments = $('input#includeEnchantments').is(":checked");
 	updateDisplay();
 });
+$('input#includeSaleToNPCs').on('change', function() {
+	includeSaleToNPCs = $('input#includeSaleToNPCs').is(":checked");
+	updateDisplay();
+});
 $('input#removeManipulated').on('change', function() {
 	removeManipulated = $('input#removeManipulated').is(":checked");
 	updateDisplay();
@@ -369,4 +420,5 @@ $('button#helpButton').click(function(){
 });
 
 // Get the data from the Skyblock API
-getProductList();
+getBazaarProductList();
+getItemList();
