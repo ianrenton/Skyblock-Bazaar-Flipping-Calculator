@@ -9,53 +9,58 @@
 </head>
 <body>
 	<a href="https://github.com/ianrenton/Skyblock-Bazaar-Flipping-Calculator"><img width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_green_007200.png?resize=149%2C149" class="attachment-full size-full github-ribbon" alt="Fork me on GitHub" data-recalc-dims="1"></a>
-	<button type="button" id="helpButton">Explain Please!</button>
 
 	<h1>Skyblock Bazaar Flipping Calculator</h1>
 
-	<div class="help">
-		<p>"Bazaar Flipping" in Hypixel Skyblock is the practice of putting in a <b>Buy Order</b> for a certain set of items at the Bazaar, and simultaneously also putting in a <b>Sell Offer</b> for the same items, for a higher price. This page queries the Skyblock API and gives you a list of the most profitable items to "flip" at the present time.</p>
-	</div>
+	<p>"Bazaar Flipping" in Hypixel Skyblock is the practice of putting in a <b>Buy Order</b> for a certain set of items at the Bazaar, and simultaneously also putting in a <b>Sell Offer</b> for the same items, for a higher price. This page queries the Skyblock API and gives you a list of the most profitable items to "flip" at the present time.</p>
 
 	<div class="inputs">
-		<p>I have <input id="maxOutlay" type="text"> coins to use for bazaar flipping</p>
+		<div class="tooltipparent">
+			<p>I have <input id="maxOutlay" type="text"> coins to use for bazaar flipping</p>
 
-		<div class="help">
-			<p>Number of coins available: This will affect how many of each item you can afford to flip.</p>
+			<div class="tooltip">Number of coins available: This will affect how many of each item you can afford to flip.</div>
 		</div>
 
-		<p>I only want to place at most <input id="maxOffers" type="text"> offers</p>
-
-		<div class="help">
-			<p>Maximum number of offers: For very cheap items, you may have to place more than one offer to achieve the maximum profit, due to the 71680 item cap per offer. This control constrains this if you only wish to make a small number of orders/offers.</p>
+		<div id="optionsheader">
+			<input type="checkbox" id="showOptions" name="showOptions">
+			<label for="showOptions">Options&nbsp;</label>
 		</div>
 
-		<p>Exclude items with a sales backlog of more than <input id="maxBacklog" type="text"> days</p>
+		<div id="options">
+			<div class="tooltipparent">
+				<p>I only want to place at most <input id="maxOffers" type="text"> offers</p>
 
-		<div class="help">
-			<p>Exclude items with long backlogs: In some cases, certain items may be selling very slowly, leading to a high risk that you will be left with the items, not the profit. This control excludes items from the list that have a backlog of more than a certain number of days.</p>
+				<div class="tooltip">Maximum number of offers: For very cheap items, you may have to place more than one offer to achieve the maximum profit, due to the 71680 item cap per offer. This control constrains this if you only wish to make a small number of orders/offers.</div>
+			</div>
+
+			<div class="tooltipparent">
+				<p>Exclude items with a sales backlog of more than <input id="maxBacklog" type="text"> days</p>
+
+				<div class="tooltip">Exclude items with long backlogs: In some cases, certain items may be selling very slowly, leading to a high risk that you will be left with the items, not the profit. This control excludes items from the list that have a backlog of more than a certain number of days.</div>
+			</div>
+
+			<div class="tooltipparent">
+				<p><input name="includeEnchantments" id="includeEnchantments" type="checkbox" class="css-checkbox" />
+				<label for="includeEnchantments">Include enchantments</label></p>
+
+				<div class="tooltip">Include enchantment items: These generally sell very slowly, leading to a high risk that you will be left with the items, not the profit&nbsp;even though the "Sales Backlog" appears small. This checkbox controls whether enchantments appear in the list.</div>
+			</div>
+
+			<div class="tooltipparent">
+				<p><input name="includeSaleToNPCs" id="includeSaleToNPCs" type="checkbox" class="css-checkbox" checked="checked" />
+				<label for="includeSaleToNPCs">Indicate where items can be sold to NPCs for more than on the Bazaar</label></p>
+
+				<div class="tooltip">Allow sale to NPCs: Some items sell on the Bazaar for less than an NPC will buy them for. Select this option to indicate where selling to an NPC is more profitable.</div>
+			</div>
+
+			<div class="tooltipparent">
+				<p><input name="removeManipulated" id="removeManipulated" type="checkbox" class="css-checkbox" />
+				<label for="removeManipulated">Remove items that may be manipulated</label></p>
+
+				<div class="tooltip">Remove manipulated items: A formula checks if the spread between the buy and sell price is very large. A wide margin (something like 10x) might mean that the item is being manipulated. This checkbox controls whether these potentially manipulated items appear in the list.</div>
+			</div>
 		</div>
 
-		<p><input name="includeEnchantments" id="includeEnchantments" type="checkbox" class="css-checkbox" />
-		<label for="includeEnchantments">Include enchantments</label></p>
-
-		<div class="help">
-			<p>Include enchantment items: These generally sell very slowly, leading to a high risk that you will be left with the items, not the profit&nbsp;even though the "Sales Backlog" appears small. This checkbox controls whether enchantments appear in the list.</p>
-		</div>
-
-		<p><input name="includeSaleToNPCs" id="includeSaleToNPCs" type="checkbox" class="css-checkbox" checked="checked" />
-		<label for="includeSaleToNPCs">Indicate where items can be sold to NPCs for more than on the Bazaar</label></p>
-
-		<div class="help">
-			<p>Allow sale to NPCs: Some items sell on the Bazaar for less than an NPC will buy them for. Select this option to indicate where selling to an NPC is more profitable.</p>
-		</div>
-
-		<p><input name="removeManipulated" id="removeManipulated" type="checkbox" class="css-checkbox" />
-			<label for="removeManipulated">Remove items that may be manipulated</label></p>
-
-		<div class="help">
-			<p>Remove manipulated items: A formula checks if the spread between the buy and sell price is very large. A wide margin (something like 10x) might mean that the item is being manipulated. This checkbox controls whether these potentially manipulated items appear in the list.</p>
-		</div>
 	</div>
 
 	<div class="sorts">
@@ -67,19 +72,6 @@
 		<label for="sortByProfitPerItem">Sort by Profit per Item</label>
 		<input type="radio" id="sortByTotalProfit" class="sortBy" name="sortBy" value="totalProfit" checked="checked">
 		<label for="sortByTotalProfit">Sort by Total Profit</label>
-	</div>
-
-	<div class="help">
-		<p>The table shows all items tradeable on the bazaar, unless: (a) it's not profitable to flip it, (b) it's so expensive to buy you can't even afford one item, or (c) the backlog to sell the item is longer than your limit.</p>
-		<p>The columns are explained as follows:</p>
-		<ul>
-			<li><b>Sales Backlog:</b> This is the number of items currently for sale, divided by the number of daily sales, averaged over a week. It is a measure, in days, of how long on average you might expect your sale offer to be fulfilled. Higher numbers represent greater risk that you will spend many days owning the items, unable to sell them.</li>
-			<li><b>Buy Order at:</b> The price (per item) you should submit a Buy Order at. This is 0.1 coins higher than the current highest-priced Buy Order, offering more than the competition in the hope of a quick buy.</li>
-			<li><b>Sell Offer at:</b> The price (per item) you should submit a Sell Offer at. This is 0.1 coins lower than the current lowest Sell Offer, undercutting the comptetition in the hope of a quick sale.</li>
-			<li><b>Profit per Item:</b> The profit implied per item, i.e. (sell offer price &minus; buy order price).</li>
-			<li><b>Quantity:</b> The quantity of these items you can "flip", based on the money you have available. If you allow the calculator to use more than one offer at a time, the number of offers required to meet this quantity will also be shown.</li>
-			<li><b>Total Profit:</b> The total profit made by flipping the stated quantity of this item.</li>
-		</ul>
 	</div>
 
 	<div id="table"></div>

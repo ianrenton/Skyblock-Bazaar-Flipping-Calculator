@@ -327,11 +327,16 @@ function updateDisplay() {
 	// Create table header. If maxOffers is >1, an extra column is added to show
 	// the number of offers required to buy/sell that many items
 	var table = $('<table>').addClass('results');
-	var headerFields = "<th>Item Name</th><th>Sales Backlog</th><th>Buy Order at</th><th>Sell Offer at</th><th>Profit per Item</th><th>Quantity</th>";
+	var headerFields = "<th>Item Name</th>"
+	headerFields += "<th><div class='tooltipparent'>Sales Backlog<div class='tooltip'>Sales Backlog is the number of items currently for sale, divided by the number of daily sales, averaged over a week. It is a measure, in days, of how long on average you might expect your sale offer to be fulfilled. Higher numbers represent greater risk that you will spend many days owning the items, unable to sell them.</div></div></th>"
+	headerFields += "<th><div class='tooltipparent'>Buy Order at<div class='tooltip'>'Buy Order at' shows the price (per item) you should submit a Buy Order at. This is 0.1 coins higher than the current highest-priced Buy Order, offering more than the competition in the hope of a quick buy.</div></div></th>"
+	headerFields += "<th><div class='tooltipparent'>Sell Offer at<div class='tooltip'>'Sell Offer at' shows the price (per item) you should submit a Sell Offer at. This is 0.1 coins lower than the current lowest Sell Offer, undercutting the comptetition in the hope of a quick sale. If '(to NPC)' is shown, you can make more money selling this item to an NPC than selling on the Bazaar.</div></div></th>"
+	headerFields += "<th><div class='tooltipparent'>Profit per Item<div class='tooltip'>'Profit per item' is the sell offer price &minus; the buy order price.</div></div></th>"
+	headerFields += "<th><div class='tooltipparent'>Quantity<div class='tooltip'>'Quantity' shows the number of these items you can 'flip', based on the money you have available and the maximum number of orders you want to make.</div></div></th>";
 	if (maxOffers > 1) {
-		headerFields += "<th>Offer Breakdown</th>";
+		headerFields += "<th><div class='tooltipparent'>Offer Breakdown<div class='tooltip'>'Offer breakdown' shows how many maximum-number orders you need to make, plus how many extra leftover items you need to order in the last order.</div></div></th>";
 	}
-	headerFields += "<th>Total Profit</th>";
+	headerFields += "<th><div class='tooltipparent'>Total Profit<div class='tooltip'>'Total profit' shows how much money you should make by flipping the stated quantity of this item.</div></div></th>";
 	var header = $('<tr>').html(headerFields);
 
 	table.append(header);
@@ -415,8 +420,8 @@ $('input#removeManipulated').on('change', function() {
 	removeManipulated = $('input#removeManipulated').is(":checked");
 	updateDisplay();
 });
-$('button#helpButton').click(function(){
-  $('div.help').toggle("fast");
+$("input#showOptions").click(function() {
+  $("#options").slideToggle("slow");
 });
 
 // Get the data from the Skyblock API

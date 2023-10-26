@@ -30,16 +30,38 @@ img.github-ribbon {
   top: 0;
   right: 0;
 }
-button#helpButton {
-  position: absolute;
-  top: 100px;
-  left: 100px;
-  padding: 0.5em;
-  border: 3px solid #55AC58;
-  background-color: #027201;
-  color: white;
-  font-family: "Minecraft", sans-serif;
-  font-size: 1em;
+
+/* Options drop-down formatting */
+div#optionsheader input[type=checkbox] {
+  opacity: 0;
+  position: fixed;
+  width: 0;
+}
+div#optionsheader label {
+    display: inline-block;
+    padding: 10px 20px;
+    border: 3px solid black;
+}
+div#optionsheader label:hover {
+  background-color: #ccc;
+}
+div#optionsheader input[type="checkbox"]:checked + label {
+    background-color: black;
+    color: white;
+}
+div#optionsheader input[type="checkbox"]:not(:checked) + label::after {
+  content: "\25BC";
+}
+div#optionsheader input[type="checkbox"]:checked + label::after {
+  content: "\25B2";
+}
+div#options {
+  width: 50em;
+  border: 3px solid black;
+  display: none;
+  text-align: left;
+  margin: 0 auto;
+  padding: 0 2em;
 }
 
 /** Input field formatting */
@@ -129,17 +151,39 @@ div.sorts input[type="radio"]:checked + label {
     color: white;
 }
 
-/* Help formatting */
-div.help {
-  display: none;
-  padding: 0.5em;
-  border: 3px solid #55AC58;
-  background-color: #027201;
-  color: white;
-  font-family: sans-serif;
+/* Tooltip formatting */
+.tooltipparent {
+  position: relative;
 }
-div.help p {
-  margin: 0;
+.tooltipparent .tooltip {
+  visibility: hidden;
+  max-width: 60em;
+  border: 2px solid #55AC58;
+  background-color: #027201;
+  color: #fff;
+  font-family: sans-serif;
+  padding: 0.5em 0.5em;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -30em;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.tooltipparent .tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #027201 transparent transparent transparent;
+}
+.tooltipparent:hover .tooltip {
+  visibility: visible;
+  opacity: 1;
 }
 
 /* Table formatting */
