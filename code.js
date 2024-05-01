@@ -360,31 +360,109 @@ function updateDisplay() {
 	$('#table').html(table);
 
 	// Create explanation of missing items
-	var missingItemExplanation = '';
+	var missingItemExplanation1 = '';
+	var missingItemExplanation2 = '';
+	var missingItemExplanation3 = '';
+	var missingItemExplanation4 = '';
+	var missingItemExplanation5 = '';
+	var textToHide1 = document.getElementById("button1");
+	var textToHide2 = document.getElementById("button2");
+	var textToHide3 = document.getElementById("button3");
+	var textToHide4 = document.getElementById("button4");
+	var textToHide5 = document.getElementById("button5");
+
 	if (notProfitable.length > 0) {
+		textToHide1.classList.remove("hidden");
+		textToHide1.classList.add("shown");
 		notProfitable.sort((a, b) => (a.profitPerItem > b.profitPerItem) ? -1 : 1);
-		missingItemExplanation += '<p><b>Items excluded from the table because they are not profitable:</b><br/>' + notProfitable.map(function(o) { return (o.name + ' (' + Math.abs(o.profitPerItem).toFixed(1) + ' loss)'); }).join(', ') + '</p>';
+		missingItemExplanation1 += notProfitable.map(function(o) { return (o.name + ' (' + Math.abs(o.profitPerItem).toFixed(1) + ' loss)'); }).join(', ');
+	} 
+	else {
+		textToHide1.classList.remove("shown");
+		textToHide1.classList.add("hidden");
 	}
 	if (notAffordable.length > 0) {
+		textToHide2.classList.remove("hidden");
+		textToHide2.classList.add("shown");
 		notAffordable.sort((a, b) => (a.buyPrice > b.buyPrice) ? -1 : 1);
-		missingItemExplanation += '<p><b>Items excluded from the table because you cannot afford one:</b><br/>' + notAffordable.map(function(o) { return (o.name + ' (' + o.buyPrice.toFixed(1) + ' per item)'); }).join(', ') + '</p>';
+		missingItemExplanation2 += notAffordable.map(function(o) { return (o.name + ' (' + o.buyPrice.toFixed(1) + ' per item)'); }).join(', ');
+	} 
+	else {
+		textToHide2.classList.remove("shown");
+		textToHide2.classList.add("hidden");
 	}
 	if (notSellable.length > 0) {
+		textToHide3.classList.remove("hidden");
+		textToHide3.classList.add("shown");
 		notSellable.sort((a, b) => (a.salesBacklog > b.salesBacklog) ? -1 : 1);
-		missingItemExplanation += '<p><b>Items excluded from the table because the sales backlog is too long:</b><br/>' + notSellable.map(function(o) { return (o.name + ' (' + o.salesBacklog.toFixed(1) + ' days)'); }).join(', ') + '</p>';
+		missingItemExplanation3 += notSellable.map(function(o) { return (o.name + ' (' + o.salesBacklog.toFixed(1) + ' days)'); }).join(', ');
+	} 
+	else {
+		textToHide3.classList.remove("shown");
+		textToHide3.classList.add("hidden");
 	}
 	if (excludedEnchantments.length > 0) {
+		textToHide4.classList.remove("hidden");
+		textToHide4.classList.add("shown");
 		excludedEnchantments.sort((a, b) => (a.name < b.name) ? -1 : 1);
-		missingItemExplanation += '<p><b>Enchantments excluded from the table at user request:</b><br/>' + excludedEnchantments.map(function(o) { return (o.name); }).join(', ') + '</p>';
+		missingItemExplanation4 += excludedEnchantments.map(function(o) { return (o.name); }).join(', ');
+	} 
+	else {
+		textToHide4.classList.remove("shown");
+		textToHide4.classList.add("hidden");
 	}
 	if (likelyManipulated.length > 0) {
+		textToHide5.classList.remove("hidden");
+		textToHide5.classList.add("shown");
 		likelyManipulated.sort((a, b) => (a.name < b.name) ? -1 : 1);
-		missingItemExplanation += '<p><b>Likely-manipulated items excluded from the table at user request:</b><br/>' + likelyManipulated.map(function(o) { return (o.name); }).join(', ') + '</p>';
+		missingItemExplanation5 += likelyManipulated.map(function(o) { return (o.name); }).join(', ');
+	} 
+	else {
+		textToHide5.classList.remove("shown");
+		textToHide5.classList.add("hidden");
 	}
-	$('#missingItemExplanation').html(missingItemExplanation);
+
+	$('#missingItemExplanation1').html(missingItemExplanation1);
+	$('#missingItemExplanation2').html(missingItemExplanation2);
+	$('#missingItemExplanation3').html(missingItemExplanation3);
+	$('#missingItemExplanation4').html(missingItemExplanation4);
+	$('#missingItemExplanation5').html(missingItemExplanation5);
+
 }
 
 // Run on startup:
+
+// Event handler for collapsible text
+document.addEventListener("DOMContentLoaded", function() {
+	const collapsibleContainers = document.querySelectorAll(".collapsible-container");
+  
+	collapsibleContainers.forEach(function(container) {
+	  let buttonUsed = false;
+	  const collapsibleBtn = container.querySelector(".collapsible-btn");
+	  const collapsibleContent = container.querySelector(".content");
+	  const rightArrow = collapsibleBtn.querySelector(".arrow-right");
+	  const downArrow = collapsibleBtn.querySelector(".arrow-down");
+  
+	  collapsibleBtn.addEventListener("click", function() {
+		if (!buttonUsed) {
+		  collapsibleContent.style.display = "none";
+		  buttonUsed = true;
+		}
+  
+		// Toggle the visibility of the content
+		collapsibleContent.style.display =
+		  collapsibleContent.style.display === "none" ? "block" : "none";
+  
+		if (collapsibleContent.style.display === "none") {
+		  downArrow.style.display = "none";
+		  rightArrow.style.display = "block";
+		} else {
+		  rightArrow.style.display = "none";
+		  downArrow.style.display = "block";
+		}
+	  });
+	});
+  });
 
 // Bind UI inputs to set internal values and update UI
 $('#maxOutlay').val(maxOutlay);
@@ -427,3 +505,5 @@ $("input#showOptions").click(function() {
 // Get the data from the Skyblock API
 getBazaarProductList();
 getItemList();
+
+
