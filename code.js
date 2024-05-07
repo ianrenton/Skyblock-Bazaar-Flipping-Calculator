@@ -10,6 +10,7 @@ var itemData = {};
 // Default values
 var maxOutlay = 1000000;
 var maxOffers = 1;
+var maxQuantity = 0;
 var maxBacklog = 7;
 var includeEnchantments = false;
 var includeSaleToNPCs = true;
@@ -226,6 +227,7 @@ function updateDisplay() {
 	var notProfitable = [];
 	var notAffordable = [];
 	var notSellable = [];
+  var tooMany = [];
 	var excludedEnchantments = [];
 	var likelyManipulated = [];
 	var cheaperToNPC = [];
@@ -307,9 +309,11 @@ function updateDisplay() {
 				notSellable.push(item);
 			} else if (isLikelyManipulated(highestBuyOrder, lowestSellOffer) && removeManipulated) {
 			    likelyManipulated.push(item);
-			} else {
-				calcData.push(item);
-			}
+			} else if (maxQuantity > 0 && affordableQuantity > maxQuantity) {
+        tooMany.push(item);
+      } else {
+        calcData.push(item);
+      }
 		}
 	}
 
@@ -473,6 +477,11 @@ $('#maxOutlay').keyup(function() {
 $('#maxOffers').val(maxOffers);
 $('#maxOffers').keyup(function() {
     maxOffers = $( this ).val();
+    updateDisplay();
+});
+$('#maxQuantity').val(maxQuantity);
+$('#maxQuantity').keyup(function() {
+    maxQuantity = $( this ).val();
     updateDisplay();
 });
 $('#maxBacklog').val(maxBacklog);
