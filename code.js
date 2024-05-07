@@ -369,11 +369,13 @@ function updateDisplay() {
 	var missingItemExplanation3 = '';
 	var missingItemExplanation4 = '';
 	var missingItemExplanation5 = '';
+	var missingItemExplanation6 = '';
 	var textToHide1 = document.getElementById("button1");
 	var textToHide2 = document.getElementById("button2");
 	var textToHide3 = document.getElementById("button3");
 	var textToHide4 = document.getElementById("button4");
 	var textToHide5 = document.getElementById("button5");
+	var textToHide6 = document.getElementById("button6");
 
 	if (notProfitable.length > 0) {
 		textToHide1.classList.remove("hidden");
@@ -425,12 +427,23 @@ function updateDisplay() {
 		textToHide5.classList.remove("shown");
 		textToHide5.classList.add("hidden");
 	}
+	if (tooMany.length > 0) {
+		textToHide6.classList.remove("hidden");
+		textToHide6.classList.add("shown");
+		tooMany.sort((a, b) => (a.name < b.name) ? -1 : 1);
+		missingItemExplanation6 += tooMany.map(function(o) { return (o.name); }).join(', ');
+	} 
+	else {
+		textToHide6.classList.remove("shown");
+		textToHide6.classList.add("hidden");
+	}
 
 	$('#missingItemExplanation1').html(missingItemExplanation1);
 	$('#missingItemExplanation2').html(missingItemExplanation2);
 	$('#missingItemExplanation3').html(missingItemExplanation3);
 	$('#missingItemExplanation4').html(missingItemExplanation4);
 	$('#missingItemExplanation5').html(missingItemExplanation5);
+	$('#missingItemExplanation6').html(missingItemExplanation6);
 
 }
 
