@@ -8,13 +8,13 @@ var bazaarData = {};
 var itemData = {};
 
 // Default values
-var maxOutlay = 1000000;
-var maxOffers = 1;
-var maxQuantity = 0;
-var maxBacklog = 7;
-var includeEnchantments = false;
-var includeSaleToNPCs = true;
-var removeManipulated = false;
+var maxOutlay = localStorage.getItem("maxOutlay") ?? 1000000;
+var maxOffers = localStorage.getItem("maxOffers") ?? 1;
+var maxQuantity = localStorage.getItem("maxQuantity") ?? 0;
+var maxBacklog = localStorage.getItem("maxBacklog") ?? 7;
+var includeEnchantments = localStorage.getItem("includeEnchantments") ?? false;
+var includeSaleToNPCs = localStorage.getItem("includeSaleToNPCs") ?? true;
+var removeManipulated = localStorage.getItem("removeManipulated") ?? false;
 var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
 var sortByTotalProfit = true;
@@ -485,21 +485,25 @@ document.addEventListener("DOMContentLoaded", function() {
 $('#maxOutlay').val(maxOutlay);
 $('#maxOutlay').keyup(function() {
     maxOutlay = $( this ).val();
+    localStorage.setItem("maxOutlay", maxOutlay);
     updateDisplay();
 });
 $('#maxOffers').val(maxOffers);
 $('#maxOffers').keyup(function() {
     maxOffers = $( this ).val();
+    localStorage.setItem("maxOffers", maxOffers);
     updateDisplay();
 });
 $('#maxQuantity').val(maxQuantity);
 $('#maxQuantity').keyup(function() {
     maxQuantity = $( this ).val();
+    localStorage.setItem("maxQuantity", maxQuantity);
     updateDisplay();
 });
 $('#maxBacklog').val(maxBacklog);
 $('#maxBacklog').keyup(function() {
     maxBacklog = $( this ).val();
+    localStorage.setItem("maxBacklog", maxBacklog);
     updateDisplay();
 });
 $('input.sortBy').on('change', function() {
@@ -510,14 +514,17 @@ $('input.sortBy').on('change', function() {
 });
 $('input#includeEnchantments').on('change', function() {
 	includeEnchantments = $('input#includeEnchantments').is(":checked");
+  localStorage.setItem("includeEnchantments", includeEnchantments);
 	updateDisplay();
 });
 $('input#includeSaleToNPCs').on('change', function() {
 	includeSaleToNPCs = $('input#includeSaleToNPCs').is(":checked");
+  localStorage.setItem("includeSaleToNPCs", includeSaleToNPCs);
 	updateDisplay();
 });
 $('input#removeManipulated').on('change', function() {
 	removeManipulated = $('input#removeManipulated').is(":checked");
+  localStorage.setItem("removeManipulated", removeManipulated);
 	updateDisplay();
 });
 $("input#showOptions").click(function() {
