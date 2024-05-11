@@ -27,6 +27,7 @@ ITEM_NAMES_LOOKUP.set('ENCHANTED_HUGE_MUSHROOM_1', 'Enchanted Brown Mushroom Blo
 ITEM_NAMES_LOOKUP.set('ENCHANTED_HUGE_MUSHROOM_2', 'Enchanted Red Mushroom Block');
 ITEM_NAMES_LOOKUP.set('SULPHUR', 'Gunpowder');
 ITEM_NAMES_LOOKUP.set('RABBIT', 'Raw Rabbit');
+ITEM_NAMES_LOOKUP.set('RABBIT_FOOT', "Rabbit's Foot");
 ITEM_NAMES_LOOKUP.set('ENCHANTED_RABBIT', 'Enchanted Raw Rabbit');
 ITEM_NAMES_LOOKUP.set('RAW_FISH:1', 'Raw Salmon');
 ITEM_NAMES_LOOKUP.set('RAW_FISH:2', 'Clownfish');
