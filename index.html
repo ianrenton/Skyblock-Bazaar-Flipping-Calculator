@@ -34,6 +34,12 @@
 			</div>
 
 			<div class="tooltipparent">
+				<p>I only want at most <input id="maxQuantity" type="text"> items per offer</p>
+
+				<div class="tooltip">Exclude items with large quantity amounts. Intended to be used for players who do not want to manage high-quantity offer. May not be compatible with multiple offers.</div>
+			</div>
+
+			<div class="tooltipparent">
 				<p>Exclude items with a sales backlog of more than <input id="maxBacklog" type="text"> days</p>
 
 				<div class="tooltip">Exclude items with long backlogs: In some cases, certain items may be selling very slowly, leading to a high risk that you will be left with the items, not the profit. This control excludes items from the list that have a backlog of more than a certain number of days.</div>
@@ -119,6 +125,17 @@
 		</button>
 		<div class="content">
 			<div id="missingItemExplanation4"></div>
+		</div>
+	</div>
+
+  <div class="collapsible-container">
+		<button class="collapsible-btn" id="button6">
+			<span class="buttonText"><b>Items excluded from the table because the items per offer is too high.</b></span>
+			<div class="arrow-right"></div>
+			<div class="arrow-down"></div>
+		</button>
+		<div class="content">
+			<div id="missingItemExplanation6"></div>
 		</div>
 	</div>
 

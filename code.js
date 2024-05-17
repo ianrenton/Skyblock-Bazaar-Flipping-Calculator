@@ -8,12 +8,13 @@ var bazaarData = {};
 var itemData = {};
 
 // Default values
-var maxOutlay = 1000000;
-var maxOffers = 1;
-var maxBacklog = 7;
-var includeEnchantments = false;
-var includeSaleToNPCs = true;
-var removeManipulated = false;
+var maxOutlay = localStorage.getItem("maxOutlay") ?? 1000000;
+var maxOffers = localStorage.getItem("maxOffers") ?? 1;
+var maxQuantity = localStorage.getItem("maxQuantity") ?? 0;
+var maxBacklog = localStorage.getItem("maxBacklog") ?? 7;
+var includeEnchantments = localStorage.getItem("includeEnchantments") ?? false;
+var includeSaleToNPCs = localStorage.getItem("includeSaleToNPCs") ?? true;
+var removeManipulated = localStorage.getItem("removeManipulated") ?? false;
 var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
 var sortByTotalProfit = true;
@@ -227,6 +228,7 @@ function updateDisplay() {
 	var notProfitable = [];
 	var notAffordable = [];
 	var notSellable = [];
+  var tooMany = [];
 	var excludedEnchantments = [];
 	var likelyManipulated = [];
 	var cheaperToNPC = [];
@@ -308,9 +310,11 @@ function updateDisplay() {
 				notSellable.push(item);
 			} else if (isLikelyManipulated(highestBuyOrder, lowestSellOffer) && removeManipulated) {
 			    likelyManipulated.push(item);
-			} else {
-				calcData.push(item);
-			}
+			} else if (maxQuantity > 0 && affordableQuantity > maxQuantity) {
+        tooMany.push(item);
+      } else {
+        calcData.push(item);
+      }
 		}
 	}
 
@@ -366,11 +370,13 @@ function updateDisplay() {
 	var missingItemExplanation3 = '';
 	var missingItemExplanation4 = '';
 	var missingItemExplanation5 = '';
+	var missingItemExplanation6 = '';
 	var textToHide1 = document.getElementById("button1");
 	var textToHide2 = document.getElementById("button2");
 	var textToHide3 = document.getElementById("button3");
 	var textToHide4 = document.getElementById("button4");
 	var textToHide5 = document.getElementById("button5");
+	var textToHide6 = document.getElementById("button6");
 
 	if (notProfitable.length > 0) {
 		textToHide1.classList.remove("hidden");
@@ -422,12 +428,23 @@ function updateDisplay() {
 		textToHide5.classList.remove("shown");
 		textToHide5.classList.add("hidden");
 	}
+	if (tooMany.length > 0) {
+		textToHide6.classList.remove("hidden");
+		textToHide6.classList.add("shown");
+		tooMany.sort((a, b) => (a.name < b.name) ? -1 : 1);
+		missingItemExplanation6 += tooMany.map(function(o) { return (o.name); }).join(', ');
+	} 
+	else {
+		textToHide6.classList.remove("shown");
+		textToHide6.classList.add("hidden");
+	}
 
 	$('#missingItemExplanation1').html(missingItemExplanation1);
 	$('#missingItemExplanation2').html(missingItemExplanation2);
 	$('#missingItemExplanation3').html(missingItemExplanation3);
 	$('#missingItemExplanation4').html(missingItemExplanation4);
 	$('#missingItemExplanation5').html(missingItemExplanation5);
+	$('#missingItemExplanation6').html(missingItemExplanation6);
 
 }
 
@@ -469,16 +486,25 @@ document.addEventListener("DOMContentLoaded", function() {
 $('#maxOutlay').val(maxOutlay);
 $('#maxOutlay').keyup(function() {
     maxOutlay = $( this ).val();
+    localStorage.setItem("maxOutlay", maxOutlay);
     updateDisplay();
 });
 $('#maxOffers').val(maxOffers);
 $('#maxOffers').keyup(function() {
     maxOffers = $( this ).val();
+    localStorage.setItem("maxOffers", maxOffers);
+    updateDisplay();
+});
+$('#maxQuantity').val(maxQuantity);
+$('#maxQuantity').keyup(function() {
+    maxQuantity = $( this ).val();
+    localStorage.setItem("maxQuantity", maxQuantity);
     updateDisplay();
 });
 $('#maxBacklog').val(maxBacklog);
 $('#maxBacklog').keyup(function() {
     maxBacklog = $( this ).val();
+    localStorage.setItem("maxBacklog", maxBacklog);
     updateDisplay();
 });
 $('input.sortBy').on('change', function() {
@@ -489,14 +515,17 @@ $('input.sortBy').on('change', function() {
 });
 $('input#includeEnchantments').on('change', function() {
 	includeEnchantments = $('input#includeEnchantments').is(":checked");
+  localStorage.setItem("includeEnchantments", includeEnchantments);
 	updateDisplay();
 });
 $('input#includeSaleToNPCs').on('change', function() {
 	includeSaleToNPCs = $('input#includeSaleToNPCs').is(":checked");
+  localStorage.setItem("includeSaleToNPCs", includeSaleToNPCs);
 	updateDisplay();
 });
 $('input#removeManipulated').on('change', function() {
 	removeManipulated = $('input#removeManipulated').is(":checked");
+  localStorage.setItem("removeManipulated", removeManipulated);
 	updateDisplay();
 });
 $("input#showOptions").click(function() {
