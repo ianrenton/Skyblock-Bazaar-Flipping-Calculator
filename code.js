@@ -44,6 +44,7 @@ ITEM_NAMES_LOOKUP.set('LOG:2', 'Birch Log');
 ITEM_NAMES_LOOKUP.set('LOG_2:1', 'Dark Oak Log');
 ITEM_NAMES_LOOKUP.set('LOG_2', 'Acacia Log');
 ITEM_NAMES_LOOKUP.set('LOG:3', 'Jungle Log');
+ITEM_NAMES_LOOKUP.set("FUEL_TANK", "Fuel Canister");
 
 // Custom limits for some items with a different buy limit to usual
 ITEM_CUSTOM_LIMIT.set('BOOSTER_COOKIE',128);
