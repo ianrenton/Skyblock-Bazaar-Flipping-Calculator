@@ -130,6 +130,9 @@ input#maxOutlay {
 input#maxOffers {
   width: 3em;
 }
+input#maxQuantity {
+  width: 5em;
+}
 input#maxBacklog {
   width: 3em;
 }
