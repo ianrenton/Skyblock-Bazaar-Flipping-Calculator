@@ -1,7 +1,9 @@
 # Hypixel Skyblock Bazaar Flipping Profit Calculator
+
 Uses the latest Hypixel Skyblock Bazaar prices to calculate the most profitable items for Bazaar "flipping" (putting in a buy order and a higher sell offer for the same items at the same time).
 
 ![Screenshot of the software](screenshot.png)
+![Newer Screenshot of the software](screenshot_2.png)
 
 Suggestions and improvements are welcome.
 
