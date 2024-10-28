@@ -18,6 +18,7 @@ var maxBacklog = Number.parseInt(localStorage.getItem("maxBacklog")) || 7;
 var includeEnchantments = localStorage.getItem("includeEnchantments") === 'true';
 var includeSaleToNPCs = !(localStorage.getItem("includeSaleToNPCs") === 'false');
 var removeManipulated = !(localStorage.getItem("removeManipulated") === 'false');
+var npcOnlyFilter = localStorage.getItem("npcOnlyFilter") === "true";
 var sortBySalesBacklog = false;
 var sortByProfitPerItem = false;
 var sortByTotalProfit = true;
@@ -274,6 +275,9 @@ function updateDisplay() {
             if (includeSaleToNPCs && npcSellPrices.has(id) && item.sellPrice < npcSellPrices.get(id)) {
                 item.sellPrice = npcSellPrices.get(id);
                 cheaperToNPC.push(item);
+                if (npcOnlyFilter) {
+                  calcData.push(item);
+                }
             }
 
             item.buyPrice = highestBuyOrder + 0.1;
@@ -327,8 +331,9 @@ function updateDisplay() {
                 notSellable.push(item);
             } else if (isLikelyManipulated(highestBuyOrder, lowestSellOffer) && removeManipulated) {
                 likelyManipulated.push(item);
-            } else {
-                calcData.push(item);
+            } else if (npcOnlyFilter == false)
+            {
+              calcData.push(item);
             }
         }
     }
@@ -551,6 +556,12 @@ $('input#removeManipulated').on('change', function() {
     localStorage.setItem("removeManipulated", removeManipulated);
     updateDisplay();
 });
+$("input#npcOnlyFilter").prop("checked", npcOnlyFilter);
+$("input#npcOnlyFilter").on("change", function () {
+    npcOnlyFilter = $("input#npcOnlyFilter").is(":checked");
+    localStorage.setItem("npcOnlyFilter", npcOnlyFilter);
+    updateDisplay();
+});
 $("input#showOptions").click(function() {
     $("#options").slideToggle("slow");
 });
@@ -558,5 +569,3 @@ $("input#showOptions").click(function() {
 // Get the data from the Skyblock API
 getBazaarProductList();
 getItemList();
-
-
