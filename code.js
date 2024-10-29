@@ -275,9 +275,6 @@ function updateDisplay() {
             if (includeSaleToNPCs && npcSellPrices.has(id) && item.sellPrice < npcSellPrices.get(id)) {
                 item.sellPrice = npcSellPrices.get(id);
                 cheaperToNPC.push(item);
-                if (npcOnlyFilter) {
-                  calcData.push(item);
-                }
             }
 
             item.buyPrice = highestBuyOrder + 0.1;
@@ -331,7 +328,7 @@ function updateDisplay() {
                 notSellable.push(item);
             } else if (isLikelyManipulated(highestBuyOrder, lowestSellOffer) && removeManipulated) {
                 likelyManipulated.push(item);
-            } else if (npcOnlyFilter == false)
+            } else if (npcOnlyFilter == false || item.sellPrice == npcSellPrices.get(id))
             {
               calcData.push(item);
             }
@@ -560,6 +557,15 @@ $("input#npcOnlyFilter").prop("checked", npcOnlyFilter);
 $("input#npcOnlyFilter").on("change", function () {
     npcOnlyFilter = $("input#npcOnlyFilter").is(":checked");
     localStorage.setItem("npcOnlyFilter", npcOnlyFilter);
+    // automatically check the include sale to npcs box if the npc only filter is enabled
+    if (npcOnlyFilter) {
+        $("input#includeSaleToNPCs").prop("checked", true).prop("disabled", true);
+        includeSaleToNPCs = true;
+        localStorage.setItem("includeSaleToNPCs", includeSaleToNPCs);
+    }else {
+        $("input#includeSaleToNPCs").prop("disabled", false);
+    }
+
     updateDisplay();
 });
 $("input#showOptions").click(function() {
