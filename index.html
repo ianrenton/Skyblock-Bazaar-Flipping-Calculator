@@ -60,13 +60,19 @@
 			</div>
 
 			<div class="tooltipparent">
+				<p><input name="npcOnlyFilter" id="npcOnlyFilter" type="checkbox" class="css-checkbox" />
+				<label for="npcOnlyFilter">Show only items that are sold to NPCs</label></p>
+
+				<div class="tooltip">If checked, only items that can be sold to NPCs for more than the Bazaar price will be shown. This removes any risk of losing coins, and you dont need to wait for someone to buy the item off of the bazaar</div>
+			</div>
+
+			<div class="tooltipparent">
 				<p><input name="removeManipulated" id="removeManipulated" type="checkbox" class="css-checkbox" checked="checked" />
 				<label for="removeManipulated">Remove items that may be manipulated</label></p>
 
 				<div class="tooltip">Remove manipulated items: A formula checks if the spread between the buy and sell price is very large. A wide margin (something like 10x) might mean that the item is being manipulated. This checkbox controls whether these potentially manipulated items appear in the list.</div>
-			</div>
+			</div>	
 		</div>
-
 	</div>
 
 	<div class="sorts">
