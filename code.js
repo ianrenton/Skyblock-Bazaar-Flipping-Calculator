@@ -271,8 +271,8 @@ function updateDisplay() {
             item.name = prettify(id);
             item.sellPrice = lowestSellOffer - 0.1;
 
-            // Interject here if we are able to sell this to an NPC for more than we would get on the bazaar
-            if (includeSaleToNPCs && npcSellPrices.has(id) && item.sellPrice < npcSellPrices.get(id)) {
+            // Interject here if we are able to sell this to an NPC for as much or more than we would get on the bazaar
+            if (includeSaleToNPCs && npcSellPrices.has(id) && item.sellPrice <= npcSellPrices.get(id)) {
                 item.sellPrice = npcSellPrices.get(id);
                 cheaperToNPC.push(item);
             }
