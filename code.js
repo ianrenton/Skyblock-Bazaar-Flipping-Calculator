@@ -49,6 +49,7 @@ ITEM_NAMES_LOOKUP.set("FUEL_TANK", "Fuel Canister");
 ITEM_NAMES_LOOKUP.set("TIGHTLY_TIED_HAY_BALE", "Tightly-Tied Hay Bale")
 ITEM_NAMES_LOOKUP.set("GLOWSTONE_DUST_DISTILLATE", "Glowstone Distillate")
 ITEM_NAMES_LOOKUP.set("MAGMA_FISH_SILVER" , "Silver Magmafish")
+ITEM_NAMES_LOOKUP.set("MUTANT_NETHER_STALK", "Mutant Nether Wart");
 
 // Custom limits for some items with a different buy limit to usual
 ITEM_CUSTOM_LIMIT.set('BOOSTER_COOKIE',128);
