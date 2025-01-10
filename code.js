@@ -1,5 +1,5 @@
 // Static defines
-var DOMAIN = "https://api.hypixel.net";
+var DOMAIN = "https://api.hypixel.net/";
 var ITEM_NAMES_LOOKUP = new Map();
 var ITEM_CUSTOM_LIMIT = new Map();
 
@@ -145,7 +145,7 @@ return ret.join('&');
 
 // Main method to get bazaar product list
 function getBazaarProductList() {
-    request("/skyblock/bazaar", {}, async function(result) {
+    request("v2/skyblock/bazaar", {}, async function(result) {
         // Store refresh date
         lastRefresh = new Date();
         // Unpack data
@@ -172,7 +172,7 @@ async function handleBazaarData(result) {
 
 // Main method to get the general item list
 function getItemList() {
-    request("/resources/skyblock/items", {}, async function(result) {
+    request("v2/resources/skyblock/items", {}, async function(result) {
         // Unpack data
         handleItemData(result);
     });
