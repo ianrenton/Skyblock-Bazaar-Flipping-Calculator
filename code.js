@@ -46,10 +46,13 @@ ITEM_NAMES_LOOKUP.set('LOG_2:1', 'Dark Oak Log');
 ITEM_NAMES_LOOKUP.set('LOG_2', 'Acacia Log');
 ITEM_NAMES_LOOKUP.set('LOG:3', 'Jungle Log');
 ITEM_NAMES_LOOKUP.set("FUEL_TANK", "Fuel Canister");
-ITEM_NAMES_LOOKUP.set("TIGHTLY_TIED_HAY_BALE", "Tightly-Tied Hay Bale")
-ITEM_NAMES_LOOKUP.set("GLOWSTONE_DUST_DISTILLATE", "Glowstone Distillate")
-ITEM_NAMES_LOOKUP.set("MAGMA_FISH_SILVER" , "Silver Magmafish")
+ITEM_NAMES_LOOKUP.set("TIGHTLY_TIED_HAY_BALE", "Tightly-Tied Hay Bale");
+ITEM_NAMES_LOOKUP.set("GLOWSTONE_DUST_DISTILLATE", "Glowstone Distillate");
+ITEM_NAMES_LOOKUP.set("MAGMA_FISH_SILVER" , "Silver Magmafish");
 ITEM_NAMES_LOOKUP.set("MUTANT_NETHER_STALK", "Mutant Nether Wart");
+ITEM_NAMES_LOOKUP.set("CORRUPTED_NETHER_STAR", "Nether Star");
+ITEM_NAMES_LOOKUP.set("ENCHANTED_INK_SACK", "Enchanted Ink Sac");
+ITEM_NAMES_LOOKUP.set("DRILL_ENGINE", "Drill Motor");
 
 // Custom limits for some items with a different buy limit to usual
 ITEM_CUSTOM_LIMIT.set('BOOSTER_COOKIE',128);
