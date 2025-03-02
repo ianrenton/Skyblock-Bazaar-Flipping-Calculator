@@ -14,7 +14,7 @@ var maxOffers = Number.parseInt(localStorage.getItem("maxOffers")) || 1;
 var useQuantityLimit = localStorage.getItem("useQuantityLimit") === 'true';
 var maxQuantity = Number.parseInt(localStorage.getItem("maxQuantity")) || 20;
 var useBacklogLimit = !(localStorage.getItem("useBacklogLimit") === 'false');
-var maxBacklog = Number.parseInt(localStorage.getItem("maxBacklog")) || 7;
+var maxBacklog = Number.parseFloat(localStorage.getItem("maxBacklog")) || 7;
 var includeEnchantments = localStorage.getItem("includeEnchantments") === 'true';
 var includeSaleToNPCs = !(localStorage.getItem("includeSaleToNPCs") === 'false');
 var removeManipulated = !(localStorage.getItem("removeManipulated") === 'false');
